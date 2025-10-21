@@ -11,7 +11,7 @@ class HomeView(ListView):
     
     
     def get_queryset(self):
-        return Post.objects.order_by("-date")
+        return Post.objects.order_by("-created_at")
     
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)

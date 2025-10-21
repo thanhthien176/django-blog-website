@@ -1,11 +1,73 @@
 {% extends "base.html" %}
 
+{% load static %}
+
 {% block title %}Home{% endblock %}
 
 {% block css_file %}{% endblock %}
 
 
-{% block content %} 
+{% block content %}
+<div class="p-4 p-md-5 mb-4 rounded text-body-emphasis bg-body-secondary">
+    <div class="container">
+        <div class="row align-items-center">
+            {% if featured_post %}
+            <div class="col-lg-6 px-4">
+                <h1 class="display-4 fst-italic">{{ featured_post.title }}</h1>
+                <p class="lead my-3">
+                {{ featured_post.summary }}
+                </p>
+                <p class="lead mb-0">
+                <a href="{% url "detail-post" featured_post.slug %}" class="text-body-emphasis fw-bold">Continue reading...</a>
+                </p>
+            </div>
+            <div class="col-lg-6 px-4 text-end">
+                {% if featured_post.image %}
+                <img src="{{ featured_post.image.url }}" alt="" class="img-fluid rounded">
+                {% endif %}
+
+            </div>
+            {% endif %}
+        </div>
+    </div>
+</div>
+
+<div class="container px-4 py-5" id="custom-cards">
+    <div class="row row-cols-1 row-cols-lg-3 align-items-stretch g-4 py-5">
+
+        {% for post in posts %}
+
+        <div class="col">
+            <a href = "{% url "detail-post" post.slug %}" class="text-decoration-none">
+            <div class="card card-cover h-100 overflow-hidden text-bg-dark rounded-4 shadow-lg"
+                style="background-image: url('{% if post.image %}{{ post.image.url }}{% else %}{% static 'image/blue-sky.jpg' %}{% endif %}');
+                background-size: cover;
+                background-position: center;
+                height: 300px;">
+                <div class="d-flex flex-column h-100 p-5 pb-3 text-white text-shadow-1">
+                    <h3 class="pt-5 mt-5 mb-4 display-6 lh-1 fw-bold">{{ post.title }}</h3>
+                    <ul class="d-flex list-unstyled mt-auto">
+                        <li class="d-flex align-items-center me-3"> 
+                            <svg class="bi me-2" width="1em" height="1em"
+                                role="img" aria-label="Location">
+                                <use xlink:href="#geo-fill"></use>
+                            </svg> <small>{{ post.author }}</small> </li>
+                        <li class="d-flex align-items-center"> 
+                            <svg class="bi me-2" width="1em" height="1em" role="img"
+                                aria-label="Duration">
+                                <use xlink:href="#calendar3"></use>
+                            </svg> <small>{{ post.date }}</small> </li>
+                    </ul>
+                </div>
+            </div>
+            </a>
+        </div>
+
+        {% endfor %}
+    </div>
+</div>
+
+
 {% endblock %}
 
 {% block script %} {% endblock %}

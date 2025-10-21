@@ -7,12 +7,29 @@ from authors.models import Author
 
 
 # Create your models here.
+class Tag(models.Model):
+    tag = models.CharField(max_length=50, unique=True)
+    slug = models.SlugField()
+    
+    def save(self, *args, **kwargs):
+        if self.slug:
+            self.slug = slugify(self.tag)
+        return super().save(*args, **kwargs)
+    
+    def __str__(self):
+        return self.tag
+    
+    
 class Post(models.Model):
     title = models.CharField(max_length=150)
+    image = models.ImageField(upload_to="post", blank=True, null=True)
+    summary = models.CharField(max_length=300, null=True, blank=True)
+    tag = models.ManyToManyField(Tag, related_name="posts", null=True, blank=True)
+    
     author = models.ForeignKey(Author, on_delete=models.CASCADE, related_name="posts")
-    image = models.ImageField(upload_to="post")
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
+    
     slug = models.SlugField(blank=True)
     
     def save(self, *args, **kwargs):
