@@ -12,19 +12,36 @@ class Tag(models.Model):
     slug = models.SlugField()
     
     def save(self, *args, **kwargs):
-        if self.slug:
+        if not self.slug:
             self.slug = slugify(self.tag)
         return super().save(*args, **kwargs)
     
     def __str__(self):
         return self.tag
     
+class Category(models.Model):
+    name = models.CharField(max_length=100, unique=True)
+    slug = models.SlugField()
+    
+    class Meta:
+        verbose_name = "Category"
+        verbose_name_plural = "Categories"
+    
+    def save(self, *args, **kwargs):
+        if not self.slug:
+            self.slug = slugify(self.tag)
+        return super().save(*args, **kwargs)
+    
+    def __str__(self):
+        return self.name
+
     
 class Post(models.Model):
     title = models.CharField(max_length=150)
     image = models.ImageField(upload_to="post", blank=True, null=True)
     summary = models.CharField(max_length=300, null=True, blank=True)
-    tag = models.ManyToManyField(Tag, related_name="posts", null=True, blank=True)
+    tag = models.ManyToManyField(Tag, related_name="posts", blank=True)
+    category = models.ForeignKey(Category, on_delete=models.CASCADE, related_name="posts", null=True)
     
     author = models.ForeignKey(Author, on_delete=models.CASCADE, related_name="posts")
     created_at = models.DateTimeField(auto_now_add=True)
@@ -51,7 +68,8 @@ class Section(models.Model):
     post = models.ForeignKey(Post, on_delete=models.CASCADE, related_name="sections")
     title = models.CharField(max_length=300)
     content = models.TextField()
-    image = models.ImageField(upload_to="section")
+    image = models.ImageField(upload_to="section", null= True, blank=True)
+    alt_image = models.CharField(max_length=100, null=True)
     
     order = models.PositiveIntegerField(default=0)
     

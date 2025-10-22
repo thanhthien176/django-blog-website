@@ -8,22 +8,22 @@
 
 
 {% block content %}
-<div class="p-4 p-md-5 mb-4 rounded text-body-emphasis bg-body-secondary">
+<div class="py-2 mb-4 rounded text-body-emphasis bg-body-secondary d-flex align-items-center" style="height:20rem; overflow:hidden;">
     <div class="container">
-        <div class="row align-items-center">
+        <div class="row align-items-center w-100">
             {% if featured_post %}
-            <div class="col-lg-6 px-4">
+            <div class="col-lg-6 px-2">
                 <h1 class="display-4 fst-italic">{{ featured_post.title }}</h1>
-                <p class="lead my-3">
+                <p class="lead my-2">
                 {{ featured_post.summary }}
                 </p>
                 <p class="lead mb-0">
                 <a href="{% url "detail-post" featured_post.slug %}" class="text-body-emphasis fw-bold">Continue reading...</a>
                 </p>
             </div>
-            <div class="col-lg-6 px-4 text-end">
+            <div class="col-lg-6 text-end">
                 {% if featured_post.image %}
-                <img src="{{ featured_post.image.url }}" alt="" class="img-fluid rounded">
+                <img src="{{ featured_post.image.url }}" alt="" class="img-fluid rounded object-fit-lg-contain">
                 {% endif %}
 
             </div>
@@ -32,7 +32,7 @@
     </div>
 </div>
 
-<div class="container px-4 py-5" id="custom-cards">
+<div class="container py-3" id="custom-cards">
     <div class="row row-cols-1 row-cols-lg-3 align-items-stretch g-4 py-5">
 
         {% for post in posts %}

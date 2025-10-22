@@ -19,3 +19,13 @@ class HomeView(ListView):
         context["featured_post"] = post.first()
         context["posts"] = post[:3]
         return context
+    
+class CategoryView(ListView):
+    model = Post
+    template_name = "blog/list-posts.html"
+    context_object_name = "posts"
+    
+class DetailPostView(DetailView):
+    model = Post
+    template_name = "blog/detail-post.html"
+    context_object_name = "post"

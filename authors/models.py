@@ -13,7 +13,7 @@ class Author(models.Model):
     summary = models.TextField()
     slug = models.SlugField(blank=True)
     
-    def fullname(self):
+    def full_name(self):
         return f"{self.first_name} {self.last_name}"
     
     def save(self, *args, **kwargs):
@@ -30,4 +30,4 @@ class Author(models.Model):
         return super().save(*args, **kwargs)
     
     def __str__(self):
-        return self.fullname()
+        return self.full_name()
