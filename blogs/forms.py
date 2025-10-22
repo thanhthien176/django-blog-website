@@ -6,7 +6,7 @@ class PostForm(forms.ModelForm):
     
     class Meta:
         model = Post
-        fields = ['title', 'author','summary', 'tag','image']
+        fields = ['title', 'author','summary', 'tag','category','image']
         widgets = {
             'title':forms.TextInput(attrs={
                 'class':'form-control',
@@ -14,6 +14,14 @@ class PostForm(forms.ModelForm):
                 'style':"font-size: 16px",
             }),
             'author': forms.Select(attrs={
+                "class":"form-select",
+                "style": "font-size: 16px; width: 80%;",
+            }),
+            'tag': forms.Select(attrs={
+                "class":"form-select",
+                "style": "font-size: 16px; width: 80%;",
+            }),
+            'category': forms.Select(attrs={
                 "class":"form-select",
                 "style": "font-size: 16px; width: 80%;",
             }),
@@ -33,7 +41,7 @@ class PostForm(forms.ModelForm):
 class SectionForm(forms.ModelForm):
     class Meta:
         model = Section
-        fields = ['title','image', 'content']
+        fields = ['title','image', 'content', "order", "alt_image"]
         widgets = {
             'title': forms.TextInput(attrs={
                 "class": "form-control",
