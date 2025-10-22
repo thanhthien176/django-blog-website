@@ -41,7 +41,7 @@ class PostForm(forms.ModelForm):
 class SectionForm(forms.ModelForm):
     class Meta:
         model = Section
-        fields = ['title','image', 'content', "order", "alt_image"]
+        fields = '__all__'
         widgets = {
             'title': forms.TextInput(attrs={
                 "class": "form-control",
@@ -52,15 +52,22 @@ class SectionForm(forms.ModelForm):
                 "class": "form-control",
                 "placeholder": "Enter the section's content...",
                 "style": "font-size: 16px"
-            })
+            }),
+            'alt_image': forms.TextInput(attrs={
+                "class": "form-control",
+                "placeholder": "Enter the section's title!",
+                "style": "font-size: 16px"
+            }),
+            
         }
+
 
 # SectionFormset
 SectionFormSet = inlineformset_factory(
     Post,
     Section,
     form= SectionForm,
-    fields=['title', 'content','image','order'],
+    fields=['title', 'content','image','order','alt_image'],
     extra=1,
     can_delete=True,
 )

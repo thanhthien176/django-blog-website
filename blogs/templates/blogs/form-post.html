@@ -9,36 +9,14 @@
   <h1>Create Post</h1>
 <form method="post" enctype="multipart/form-data">
     {% csrf_token %}
+    {% for field in form %}
     <div class="row mb-3">
-        <label id="id_title" class="col-sm-2 col-form-label fw-bold">Title</label>
+        <label id="{{ field.id_for_label }}" class="col-sm-2 col-form-label fw-bold">{{ field.label }}</label>
         <div class="col-sm-10">
-        {{ form.title }}
+        {{ field }}
         </div>
     </div>
-    <div class="row mb-3">
-        <label id="id_author" class="col-sm-2 col-form-label fw-bold">Author</label>
-        <div class="col-sm-10">
-            <div class="mb-3 d-flex align-items-center">
-                <div class="flex-grow-1">
-                    {{ form.author }}
-                </div>
-                <a href="{% url 'add-author' %}" target="_blank" class="btn btn-primary btn-sm py-1 px-2" style="font-size: 16px">+</a>
-            </div>
-        </div>
-    </div>
-    <div class="row mb-3">
-      <label id="id_image" class="col-sm-2 col-form-label fw-bold">Image</label>
-      <div class="col-sm-10">
-        {{ form.image }}
-      </div>
-
-    </div>
-    <div class="row mb-3">
-      <label id="id_summary" class="col-sm-2 col-form-label fw-bold">Summary</label>
-      <div class="col-sm-10">
-        {{ form.summary }}
-      </div>
-    </div>
+    {% endfor %}
 
     <h4>Content</h4>
     {{ formset.management_form }}
@@ -46,7 +24,20 @@
         {% for section_form in formset %}
             <div class="border p-2 mb-3 rounded">
               <h5>Section</h5>
-                {{ section_form.as_p }}
+              {% for field in section_form %}
+
+                {% if field.is_hidden %}
+                  {{ field }}
+                {% else %}
+                  <div class="row mb-3">
+                    <label id="{{ field.id_for_label }}" class="col-sm-2 col-form-label fw-bold">{{ field.label }}</label>
+                    <div class="col-sm-10">
+                    {{ field }}
+                    </div>
+                  </div>
+                {% endif %}
+              {% endfor %}
+
             </div>
         {% endfor %}
     </div>

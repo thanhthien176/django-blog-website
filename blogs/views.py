@@ -42,6 +42,32 @@ class CreatePostView(CreateView):
     template_name = "blogs/form-post.html"
     success_url = reverse_lazy("add-post")
     
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        
+        if self.request.POST:
+            context['formset'] = SectionFormSet(self.request.POST, self.request.FILES)
+        else:
+            context['formset'] = SectionFormSet()
+        return context
+    
+    def form_valid(self, form):
+        context = self.get_context_data()
+        formset = context['formset']
+        if form.is_valid() and formset.is_valid():
+            self.object = form.save()
+            formset.instance = self.object
+            formset.save()
+            # sections = formset.save(commit=False)
+            # for section in sections:
+            #     section.post = self.object
+            #     section.save()
+            
+            return redirect(self.get_success_url())
+
+        else:
+            return self.form_invalid(form)
+    
 
 class EditPostView(UpdateView):
     model = Post
@@ -81,3 +107,6 @@ class DeletePostView(DeleteView):
     
     def get_success_url(self):
         return reverse_lazy("all-posts")
+    
+def AboutView(request):
+    return render(request, "blogs/about.html")
