@@ -1,0 +1,74 @@
+{% extends "base.html" %}
+
+{% block title %}{% endblock %}
+
+{% block css_file %}{% endblock %}
+
+{% block content %}
+<div class="container">
+  <h1>Create Post</h1>
+<form method="post" enctype="multipart/form-data">
+    {% csrf_token %}
+    <div class="row mb-3">
+        <label id="id_title" class="col-sm-2 col-form-label fw-bold">Title</label>
+        <div class="col-sm-10">
+        {{ form.title }}
+        </div>
+    </div>
+    <div class="row mb-3">
+        <label id="id_author" class="col-sm-2 col-form-label fw-bold">Author</label>
+        <div class="col-sm-10">
+            <div class="mb-3 d-flex align-items-center">
+                <div class="flex-grow-1">
+                    {{ form.author }}
+                </div>
+                <a href="{% url 'add-author' %}" target="_blank" class="btn btn-primary btn-sm py-1 px-2" style="font-size: 16px">+</a>
+            </div>
+        </div>
+    </div>
+    <div class="row mb-3">
+      <label id="id_image" class="col-sm-2 col-form-label fw-bold">Image</label>
+      <div class="col-sm-10">
+        {{ form.image }}
+      </div>
+
+    </div>
+    <div class="row mb-3">
+      <label id="id_summary" class="col-sm-2 col-form-label fw-bold">Summary</label>
+      <div class="col-sm-10">
+        {{ form.summary }}
+      </div>
+    </div>
+
+    <h4>Content</h4>
+    {{ formset.management_form }}
+    <div id="section-area">
+        {% for section_form in formset %}
+            <div class="border p-2 mb-3 rounded">
+              <h5>Section</h5>
+                {{ section_form.as_p }}
+            </div>
+        {% endfor %}
+    </div>
+
+    <button type="button" id="add-section" class="btn btn-secondary">Add Section</button>
+    <button type="submit" class="btn btn-primary">Save</button>
+</form>
+</div>
+
+{% endblock %}
+
+{% block script %}
+<script>
+document.getElementById('add-section').addEventListener('click', function() {
+  const sectionArea = document.getElementById('section-area');
+  const totalForms = document.getElementById('id_sections-TOTAL_FORMS');
+  const currentCount = parseInt(totalForms.value);
+  
+  const newForm = sectionArea.children[0].cloneNode(true);
+  newForm.innerHTML = newForm.innerHTML.replaceAll(`section_set-0`, `section_set-${currentCount}`);
+  sectionArea.appendChild(newForm);
+  totalForms.value = currentCount + 1;
+});
+</script>
+{% endblock %}
