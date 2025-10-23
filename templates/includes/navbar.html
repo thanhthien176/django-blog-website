@@ -5,9 +5,6 @@
     <div
       class="d-flex flex-wrap align-items-center justify-content-between justify-content-lg-start"
     >
-    <a href="{% url "home" %}">
-     <div class="bluesky mx-3">Blue Sky</div>
-    </a>
       
      <div class="btn-group">
       <button type="button" class="btn btn-primary dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
@@ -32,9 +29,10 @@
         <li><a href="#" class="nav-link px-2 text-white">FAQs</a></li>
         <li><a href="{% url "about" %}" class="nav-link px-2 text-white">About</a></li>
       </ul>
-      <form class="col-12 col-lg-auto mb-3 mb-lg-0 me-lg-3" role="search">
+      <form id="search-form" class="col-12 col-lg-auto mb-3 mb-lg-0 me-lg-3" role="search">
         <input
           type="search"
+          id="search-input"
           class="form-control form-control-light text-bg-light"
           placeholder="Search..."
           aria-label="Search"
@@ -47,4 +45,38 @@
     </div>
   </div>
 </header>
+
+
+<script>
+document.addEventListener("DOMContentLoaded", () => {
+  const searchForm = document.querySelector("#search-form");
+  const searchInput = document.querySelector("#search-input");
+  const resultBox = document.querySelector("#search-results");
+  const defaultPosts = document.querySelector("#default-posts");
+
+  searchForm.addEventListener("submit", (e) => {
+    e.preventDefault();
+    const query = searchInput.value.trim();
+
+    if (!query) {
+      // Nếu ô search rỗng → hiện lại danh sách mặc định
+      defaultPosts.classList.remove("d-none");
+      resultBox.classList.add("d-none");
+      resultBox.innerHTML = "";
+      return;
+    }
+
+    // Nếu có query → fetch kết quả
+    fetch(`/search/?q=${encodeURIComponent(query)}`)
+      .then(response => response.text())
+      .then(html => {
+        defaultPosts.classList.add("d-none");  // ẩn danh sách mặc định
+        resultBox.classList.remove("d-none");  // hiện kết quả
+        resultBox.innerHTML = html;
+        window.scrollTo({ top: resultBox.offsetTop - 100, behavior: "smooth" });
+      });
+  });
+});
+
+</script>
 

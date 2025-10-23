@@ -17,10 +17,10 @@
         <link href="https://fonts.googleapis.com/css2?family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&family=Roboto&display=swap" rel="stylesheet">
 
     </head>
-    <body class="bg-base roboto">
+    <body class="roboto d-flex flex-column min-vh-100">
        {% include "includes/navbar.html" %}
        
-        <main class="text-base libre-baskerville-regular">
+        <main class="flex-fill bg-base text-base libre-baskerville-regular py-2">
             {% block content %}
             {% endblock %}
 

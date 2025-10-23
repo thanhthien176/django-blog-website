@@ -1,5 +1,6 @@
 from django.shortcuts import render,redirect
 from django.views.generic import ListView, DetailView, DeleteView, UpdateView, CreateView
+from django.db.models import Q
 from django.urls import reverse, reverse_lazy
 
 from .models import Post
@@ -110,3 +111,19 @@ class DeletePostView(DeleteView):
     
 def AboutView(request):
     return render(request, "blogs/about.html")
+
+def SearchPostView(request):
+    query = request.GET.get('q','')
+    posts = Post.objects.none()
+    
+    if query:
+        posts = Post.objects.filter(
+            Q(title__icontains=query)|Q(tag__tag__icontains=query)
+        ).distinct()
+        
+    return render(request, "blogs/partials/search-results.html", {
+        'posts':posts,
+        'query': query,
+        }) 
+        
+        

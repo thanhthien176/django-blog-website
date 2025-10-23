@@ -15,7 +15,9 @@
         <p>{{ post.created_at }}</p>
         </div>
         {% for section in post.sections.all %}
+        {% if section.image %}
         <img class="img-fluid" src="{{ section.image.url }}" alt="{{ section.title }}" style="height: 100vh; object-fit: contain;"/>
+        {% endif %}
         <h5>{{ section.title }}</h5>
         <p class="content">{{ section.content| linebreaks }}</p>
         {% endfor %}
